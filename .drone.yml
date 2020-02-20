@@ -1,0 +1,46 @@
+---
+kind: pipeline
+name: test
+
+steps:
+  - name: lint
+    image: golang:1.13
+    commands:
+      - make lint
+  - name: test
+    image: golang:1.13
+    commands:
+      - make test
+
+trigger:
+  event:
+    - push
+    - pull_request
+    - tag
+
+---
+kind: pipeline
+name: coverage
+
+steps:
+  - name: coverage
+    image: golang:1.13
+    environment:
+      COVERALLS_TOKEN:
+        from_secret: COVERALLS_TOKEN
+    commands:
+      - make coverage
+      - make publish-coveralls
+
+trigger:
+  repo:
+    - mvisonneau/go-helpers
+  event:
+    - push
+    - tag
+
+---
+kind: signature
+hmac: 1a5b91d1239612e83ffada88d8dc6aea03bf2977db813ebc2634937a05260452
+
+...
