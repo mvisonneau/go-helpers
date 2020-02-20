@@ -37,6 +37,10 @@ coverage: ## Generates coverage report
 show-coverage: ## Display coverage report in browser
 	go tool cover -html=coverage.out
 
+.PHONY: publish-coveralls
+publish-coveralls: setup ## Publish coverage results on coveralls
+	goveralls -service drone.io -coverprofile=coverage.out
+
 .PHONY: sign-drone
 sign-drone: ## Sign Drone CI configuration
 	drone sign $(REPOSITORY) --save
