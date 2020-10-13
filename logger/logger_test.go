@@ -4,34 +4,41 @@ import (
 	"testing"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoggerConfigureFatalText(t *testing.T) {
-	c := &Config{Level: "fatal", Format: "text"}
-	c.Configure()
+	err := Configure(Config{
+		Level:  "fatal",
+		Format: "text",
+	})
 
-	if log.GetLevel() != log.FatalLevel {
-		t.Fatalf("Expected log.Level to be 'fatal' but got %s", log.GetLevel())
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, log.FatalLevel, log.GetLevel())
 }
 
-func TestLoggerConfigureDefault(t *testing.T) {
-	c := &Config{Level: "fatal", Format: "foo"}
-	if err := c.Configure(); err == nil {
-		t.Fatal("Expected function to return an error, got nil")
-	}
+func TestLoggerConfigureInvalidFormat(t *testing.T) {
+	err := Configure(Config{
+		Level:  "fatal",
+		Format: "foo",
+	})
+
+	assert.Error(t, err)
 }
 
-func TestLoggerConfigureJson(t *testing.T) {
-	c := &Config{Level: "debug", Format: "json"}
-	if err := c.Configure(); err != nil {
-		t.Fatalf("Function is not expected to return an error, got '%s'", err.Error())
-	}
+func TestLoggerConfigureFormatJson(t *testing.T) {
+	err := Configure(Config{
+		Level:  "debug",
+		Format: "json",
+	})
+
+	assert.NoError(t, err)
 }
 
-func TestLoggerConfigureInvalidLogFormat(t *testing.T) {
-	c := &Config{Level: "foo", Format: "text"}
-	if err := c.Configure(); err == nil {
-		t.Fatal("Expected function to return an error, got nil")
-	}
+func TestLoggerConfigureInvalidLevel(t *testing.T) {
+	err := Configure(Config{
+		Level:  "foo",
+		Format: "text",
+	})
+	assert.Error(t, err)
 }

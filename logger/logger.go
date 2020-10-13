@@ -14,12 +14,16 @@ type Config struct {
 }
 
 // Configure the logger
-func (c *Config) Configure() error {
+func Configure(c Config) (err error) {
 	parsedLevel, err := log.ParseLevel(c.Level)
 	if err != nil {
-		return err
+		return
 	}
 	log.SetLevel(parsedLevel)
+
+	if parsedLevel == log.DebugLevel {
+		log.SetReportCaller(true)
+	}
 
 	formatter := &log.TextFormatter{
 		FullTimestamp: true,
@@ -31,10 +35,11 @@ func (c *Config) Configure() error {
 	case "json":
 		log.SetFormatter(&log.JSONFormatter{})
 	default:
-		return fmt.Errorf("Invalid log format '%s'", c.Format)
+		err = fmt.Errorf("Invalid log format '%s'", c.Format)
+		return
 	}
 
 	log.SetOutput(os.Stdout)
 
-	return nil
+	return
 }
