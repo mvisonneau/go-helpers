@@ -9,8 +9,9 @@ import (
 
 // Config : Type that handles logging config
 type Config struct {
-	Level  string
-	Format string
+	Level        string
+	Format       string
+	ReportCaller bool
 }
 
 // Configure the logger
@@ -20,10 +21,6 @@ func Configure(c Config) (err error) {
 		return
 	}
 	log.SetLevel(parsedLevel)
-
-	if parsedLevel == log.DebugLevel {
-		log.SetReportCaller(true)
-	}
 
 	formatter := &log.TextFormatter{
 		FullTimestamp: true,
@@ -39,6 +36,7 @@ func Configure(c Config) (err error) {
 		return
 	}
 
+	log.SetReportCaller(c.ReportCaller)
 	log.SetOutput(os.Stdout)
 
 	return
