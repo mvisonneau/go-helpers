@@ -4,11 +4,11 @@ name: test
 
 steps:
   - name: lint
-    image: golang:1.13
+    image: golang:1.15
     commands:
       - make lint
   - name: test
-    image: golang:1.13
+    image: golang:1.15
     commands:
       - make test
 
@@ -24,7 +24,7 @@ name: coverage
 
 steps:
   - name: coverage
-    image: golang:1.13
+    image: golang:1.15
     environment:
       COVERALLS_TOKEN:
         from_secret: COVERALLS_TOKEN
@@ -41,6 +41,6 @@ trigger:
 
 ---
 kind: signature
-hmac: 1a5b91d1239612e83ffada88d8dc6aea03bf2977db813ebc2634937a05260452
+hmac: 3ec1e72b6a3a4a34f5a7c22a9bb016bacff70ad77a4488651176c3dd9b321e6e
 
 ...
