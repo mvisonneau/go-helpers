@@ -40,7 +40,27 @@ trigger:
     - tag
 
 ---
+kind: pipeline
+name: release
+
+steps:
+  - name: gopkg-refresh
+    image: curlimages/curl
+    commands:
+      - curl https://sum.golang.org/lookup/github.com/mvisonneau/go-helpers@${DRONE_TAG}
+
+trigger:
+  repo:
+    - mvisonneau/go-helpers
+  event:
+    - tag
+
+depends_on:
+  - test
+  - coverage
+
+---
 kind: signature
-hmac: 3ec1e72b6a3a4a34f5a7c22a9bb016bacff70ad77a4488651176c3dd9b321e6e
+hmac: 4ee338076d63bafcf6efa413945cd676928e745f4ac1e31d7fc1d1ee84b49a7f
 
 ...

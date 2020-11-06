@@ -1,5 +1,4 @@
 NAME          := go-helpers
-VERSION       := $(shell git describe --tags --abbrev=1)
 FILES         := $(shell git ls-files */*.go)
 REPOSITORY    := mvisonneau/$(NAME)
 .DEFAULT_GOAL := help
@@ -50,7 +49,7 @@ gosec: setup ## Test code for security vulnerabilities
 
 .PHONY: test
 test: ## Run the tests against the codebase
-	go test -v -race ./...
+	go test -v -race -count=1 ./...
 
 .PHONY: install
 install: ## Build and install locally the binary (dev purpose)
